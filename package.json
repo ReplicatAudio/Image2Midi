@@ -11,7 +11,7 @@
     "@types/node": "^20.12.12"
   },
   "scripts": {
-    "run": "tsc && cd ./dist && node index",
+    "start": "tsc && cd ./dist && node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

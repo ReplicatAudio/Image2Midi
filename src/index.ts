@@ -1,6 +1,9 @@
 import * as fs from 'fs';
 import MidiWriter from 'midi-writer-js';
 import Jimp, * as jimp from 'jimp';
+
+import config, { Config } from './config';
+
 /*
 
     1 : whole
@@ -22,17 +25,6 @@ import Jimp, * as jimp from 'jimp';
     Tn : where n is an explicit number of ticks (T128 = 1 beat)
 
 */
-type Config = {
-    imageLocation: string;
-    downsample: number;
-    allowDissonance: boolean;
-    noteLength: string;
-    range: number;
-    tempo: number;
-    root: number;
-    scale: number[];
-    arp: boolean;
-};
 
 type RgbValue = {
     r: number;
@@ -171,16 +163,6 @@ class Sonic {
     }
 }
 
-const config : Config = {
-    imageLocation: './../data/test.jpg',
-    downsample: 2048 * 8,
-    noteLength: '32',
-    allowDissonance: false,
-    range: 36,
-    tempo: 120,
-    root: 60,
-    scale: [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
-    arp: true
-};
+
 
 const sonic = new Sonic(config);
