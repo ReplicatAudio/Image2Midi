@@ -44,7 +44,8 @@ class Util {
     static parseImgData(rgbData: RgbValue[], downsample: number): number[] {
         let out: number[] = [];
         for (let [index, item] of rgbData.entries()) {
-            if (index % downsample !== 0) continue;
+            // Downsample
+            if (index % (downsample * downsample) !== 0) continue;
             out.push(item.r);
             out.push(item.g);
             out.push(item.b);
@@ -61,12 +62,6 @@ class Util {
     
             for (let y = 0; y < height; y++) {
                 for (let x = 0; x < width; x++) {
-                    const color = image.getPixelColor(x, y);
-                    // const rgb: RgbValue = {
-                    //     r: (color >> 16) & 0xFF,
-                    //     g: (color >> 8) & 0xFF,
-                    //     b: color & 0xFF,
-                    // };
                     const rgba = Jimp.intToRGBA(image.getPixelColor(x,y));
                     const rgb : RgbValue = {
                         r: rgba.r,
@@ -105,10 +100,10 @@ class Sonic {
             process.exit(1);
         }
         const rawData = await Util.getRgbValuesFromImage(this.config.imageLocation);
-        console.log(rawData);
+        //console.log(rawData);
         // process.exit();
         const parsedData = Util.parseImgData(rawData, this.config.downsample);
-        console.log(parsedData);
+        //console.log(parsedData);
         // process.exit();
         this.normData = Util.normalize(parsedData, 0, this.config.range);
     }
@@ -159,10 +154,16 @@ class Sonic {
     private writeFile(): void {
         console.log('Writing file...');
         const write = new MidiWriter.Writer(this.track);
-        fs.writeFileSync('./../out/' + Date.now() + '.mid', write.buildFile());
+        const ts = Date.now();
+        let splitChar = '/';
+        // check for windows path
+        if (this.config.imageLocation.includes('\\')) splitChar = '\\';
+        const locationParts = this.config.imageLocation.split(splitChar);
+        const fileName = locationParts[locationParts.length - 1];
+        const name =  fileName + '.' + ts;
+        try { fs.mkdirSync('./out'); } catch(err) { };
+        fs.writeFileSync('./out/' + name + '.mid', write.buildFile());
     }
 }
-
-
 
 const sonic = new Sonic(config);

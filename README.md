@@ -7,9 +7,9 @@ An experimental tool that converts images files to MIDI files according to given
 git clone git@github.com:ReplicatAudio/Image2Midi.git
 cd Image2Midi
 npm install
-mkdir out
+cp config.example.json config.json
 
-## Edit the config file in `./src/config.ts`
+## Edit the config file in `./config.json`
 
 npm run start
 
